@@ -4,6 +4,8 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 
 "Indicates what fields are available at the top level of a query operation."
 type Query {
+    me: User @auth @guard,
+
     "Find a single user by an identifying attribute."
     user(
       "Search by primary key."
@@ -27,7 +29,17 @@ type Query {
 }
 
 type Mutation {
+    "Log in to a new session and get the user."
+    login(email: String!, password: String!): User!
+
+    "Log out from the current session, showing the user one last time."
+    logout: User @guard
+
+    "Register and get the user."
+    register(input: CreateUserInput! @spread): User!
+
     createUser(input: CreateUserInput! @spread): User!
+
 }
 
 "Account of a person who utilizes this application."

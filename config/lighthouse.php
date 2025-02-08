@@ -1,5 +1,7 @@
 <?php declare(strict_types=1);
 
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -30,6 +32,9 @@ return [
         'middleware' => [
             // Ensures the request is not vulnerable to cross-site request forgery.
             // Nuwave\Lighthouse\Http\Middleware\EnsureXHR::class,
+            Nuwave\Lighthouse\Http\Middleware\EnsureXHR::class,
+
+            EnsureFrontendRequestsAreStateful::class,
 
             // Always set the `Accept: application/json` header.
             Nuwave\Lighthouse\Http\Middleware\AcceptJson::class,
@@ -61,7 +66,7 @@ return [
     |
     */
 
-    'guards' => null,
+    'guards' => ['sanctum'],
 
     /*
     |--------------------------------------------------------------------------
