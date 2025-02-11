@@ -26,43 +26,28 @@ type Query {
         "Basic greeting"
         name: String!
     ): String
+
+    "Notes"
+    notes: [Note!] @paginate(defaultCount: 10)
+
+    note (
+        id: ID
+    ): Note @first
 }
 
 type Mutation {
-    "Log in to a new session and get the user."
+    "Users"
     login(email: String!, password: String!): User!
-
-    "Log out from the current session, showing the user one last time."
     logout: User @guard
-
-    "Register and get the user."
     register(input: CreateUserInput! @spread): User!
-
     createUser(input: CreateUserInput! @spread): User!
 
+
+    "Notes"
+    createNote(input: CreateNoteInput @spread): Note! @guard
+    updateNote(input: UpdateNoteInput @spread): Note @guard
+    deleteNote(id: ID!): Note @guard
 }
-
-"Account of a person who utilizes this application."
-type User {
-    "Unique primary key."
-    id: ID!
-
-    "Non-unique name."
-    name: String!
-
-    "Unique email address."
-    email: String!
-
-    "When the email was verified."
-    email_verified_at: DateTime
-
-    "When the account was created."
-    created_at: DateTime!
-
-    "When the account was last updated."
-    updated_at: DateTime!
-}
-
 
 input CreateUserInput {
     name: String!
@@ -70,3 +55,44 @@ input CreateUserInput {
     password: String! @rules(apply: ["required", "min:8", "max:512", "confirmed"])
     password_confirmation: String! @rules(apply: ["required", "min:8", "max:512"])
 }
+
+input CreateNoteInput {
+    content: String! @rules(apply: ["required", "min:3", "max:1000"])
+}
+
+input UpdateNoteInput {
+    id: ID!
+    content: String! @rules(apply: ["required", "min:3", "max:1000"])
+}
+
+
+"Account of a person who utilizes this application."
+type User {
+    id: ID!
+
+    name: String!
+
+    email: String!
+
+    notes: [Note]
+
+    email_verified_at: DateTime
+
+    created_at: DateTime!
+
+    updated_at: DateTime!
+}
+
+type Note {
+    id: ID!
+
+    content: String!
+
+    user: User!
+
+    created_at: DateTime!
+
+    updated_at: DateTime!
+}
+
+
