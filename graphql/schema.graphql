@@ -1,6 +1,8 @@
 "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
 scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 
+scalar Upload
+    @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
 
 "Indicates what fields are available at the top level of a query operation."
 type Query {
@@ -37,7 +39,7 @@ type Query {
 
 type Mutation {
     "Users"
-    login(email: String!, password: String!): User!
+    login(email: String!, password: String!): AuthToken!
     logout: User @guard
     register(input: CreateUserInput! @spread): User!
     createUser(input: CreateUserInput! @spread): User!
@@ -58,6 +60,7 @@ input CreateUserInput {
 
 input CreateNoteInput {
     content: String! @rules(apply: ["required", "min:3", "max:1000"])
+    images: [Upload]
 }
 
 input UpdateNoteInput {
@@ -83,6 +86,10 @@ type User {
     updated_at: DateTime!
 }
 
+type AuthToken {
+    accessToken: String!
+}
+
 type Note {
     id: ID!
 
@@ -90,9 +97,16 @@ type Note {
 
     user: User!
 
+    images: [Image]
+
     created_at: DateTime!
 
     updated_at: DateTime!
+}
+
+type Image {
+    path: String!
+    name: String!
 }
 
 

@@ -23,6 +23,10 @@ final readonly class Login
         $user = $guard->user();
         assert($user instanceof User, 'Since we successfully logged in, this can no longer be `null`.');
 
-        return $user;
+        $token = $user->createToken(config('app.name'));
+
+        return [
+            'accessToken' => $token->plainTextToken,
+        ];
     }
 }
