@@ -27,6 +27,7 @@ final readonly class Login
 
         return [
             'accessToken' => $token->plainTextToken,
+            'user' => $user,
         ];
     }
 }

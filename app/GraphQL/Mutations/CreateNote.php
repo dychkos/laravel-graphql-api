@@ -19,7 +19,10 @@ final readonly class CreateNote
 
         if (!empty($args['images'])) {
             foreach ($args['images'] as $image) {
-                $path = Storage::put('notes/' . $note->id . '/images', $image);
+                if (!$image) {
+                    continue;
+                }
+                $path = Storage::disk('public')->put('notes/' . $note->id . '/images', $image);
                 Log::debug('Creating note image: ' . $path);
 
                 $note->images()->create([

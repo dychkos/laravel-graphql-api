@@ -30,7 +30,7 @@ type Query {
     ): String
 
     "Notes"
-    notes: [Note!] @paginate(defaultCount: 10)
+    notes: [Note!] @paginate(defaultCount: 30)
 
     note (
         id: ID
@@ -41,7 +41,7 @@ type Mutation {
     "Users"
     login(email: String!, password: String!): AuthToken!
     logout: User @guard
-    register(input: CreateUserInput! @spread): User!
+    register(input: CreateUserInput! @spread):  AuthToken!
     createUser(input: CreateUserInput! @spread): User!
 
 
@@ -87,7 +87,8 @@ type User {
 }
 
 type AuthToken {
-    accessToken: String!
+    accessToken: String!,
+    user: User!
 }
 
 type Note {
